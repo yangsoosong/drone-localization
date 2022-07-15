@@ -1,11 +1,13 @@
 import argparse
 
-from .tello import Tello
+import tellopy
 
 
 def main():
-    drone = Tello('', 8889)
+    """Drone initiation function for testing.  """
+
     parser = argparse.ArgumentParser(description="Tello CLI")
+    parser.add_argument('command', help='foo help')
     subparsers = parser.add_subparsers(help='sub-command help')
 
     move = subparsers.add_parser('move', help='move help')
@@ -22,19 +24,25 @@ def main():
 
     args = parser.parse_args()
 
+    drone = tellopy.Tello()
+    try:
+        drone.connect()
+        drone.wait_for_connection(60.0)
+    except Exception as ex:
+        print(ex)
+        drone.quit()
+        return None
+
     if args.command == 'move':
-        drone.move(args.direction, 1)
+        drone.getattr(args.direction)(1)
     elif args.command == 'rotate':
         if args.direction == 'clockwise':
-            drone.rotate_cw(90)
+            drone.clockwise(90)
         else:
-            drone.rotate_ccw(90)
+            drone.counter_clockwise(90)
     elif args.command == 'takeoff':
         drone.takeoff()
     elif args.command == 'land':
         drone.land()
     elif args.command == 'get_info':
-        print(f'Height: {drone.get_height()}')
-        print(f'Battery: {drone.get_battery()}')
-        print(f'Flight Time: {drone.get_flight_time()}')
-        print(f'Speed: {drone.get_speed()}')
+        drone.subscribe(drone.EVENT_FLIGHT_DATA, lambda event, sender, data, **args: print('flight data: %s: %s' % (event.name, str(data))))
