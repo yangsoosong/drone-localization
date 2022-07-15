@@ -7,7 +7,6 @@ authors = ["John Ward <john@itsjohnward.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 jupyterlab = "*"
-h264decoder = {path = "./h264decoder", develop = true}
 localizer = {path = "./localizer", develop = true}
 
 [tool.poetry.dev-dependencies]
