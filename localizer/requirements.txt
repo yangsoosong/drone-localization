@@ -1,0 +1,8 @@
+tellopy
+av
+opencv-python
+image
+numpy
+matplotlib
+pillow
+opencv-python
