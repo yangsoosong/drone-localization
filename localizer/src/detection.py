@@ -1,13 +1,19 @@
 import torch
 import cv2
+from pathlib import Path
 
 # Model
 try:
+    print('Loading model...')
     model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True).eval()
 except Exception as e:
     print(e)
-    print('offline mode')
-    model = torch.hub.load('/Users/john/.cache/torch/hub/ultralytics_yolov5_master', 'yolov5s', source='local', pretrained=True).eval()
+    print('Offline mode')
+    try:
+        model = torch.hub.load(Path(Path.home(), Path('.cache/torch/hub/ultralytics_yolov5_master')), 'yolov5s', source='local', pretrained=True).eval()
+    except Exception as e:
+        print(e)
+        raise Exception("You need to run the script at least once online to make sure you have the model downloaded.")
 
 def detect_objects(image):
     detections = model([image]).pandas().xyxy[0]
