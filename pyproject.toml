@@ -7,7 +7,7 @@ authors = ["John Ward <john@itsjohnward.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 jupyterlab = "*"
-scipy = { url = "https://pypi.anaconda.org/scipy-wheels-nightly/simple/scipy/1.10.0.dev0%2B1406.d132ca3/scipy-1.10.0.dev0%2B1406.d132ca3-cp39-cp39-macosx_12_0_arm64.whl" }
+scipy = { url = "https://pypi.anaconda.org/scipy-wheels-nightly/simple/scipy/1.10.0.dev0%2B1406.d132ca3/scipy-1.10.0.dev0%2B1406.d132ca3-cp39-cp39-macosx_12_0_arm64.whl", markers = "platform_machine == 'aarch64'" }
 localizer = {path = "./localizer", develop = true}
 
 [tool.poetry.dev-dependencies]
