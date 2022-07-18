@@ -1,6 +1,7 @@
 tellopy
 av
 image
+click
 numpy>=1.21.4
 
 # https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt
