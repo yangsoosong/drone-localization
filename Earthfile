@@ -2,7 +2,7 @@ VERSION 0.6
 FROM python:3
 WORKDIR /code
 
-install:
+build:
     ENV DEBIAN_FRONTEND noninteractive
     RUN apt-get update -y
     RUN apt install libgl1-mesa-glx -y
@@ -11,5 +11,9 @@ install:
         'libxext6' -y
     COPY localizer /code/localizer
     RUN pip install -e /code/localizer
+
+docker:
+    FROM +build
+    EXPOSE 9617
     ENTRYPOINT ["tello"]
-    SAVE IMAGE python-example:latest
+    SAVE IMAGE tello:latest
