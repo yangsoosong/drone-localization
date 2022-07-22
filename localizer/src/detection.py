@@ -1,27 +1,32 @@
 import torch
 import cv2
 from pathlib import Path
+from socket import gaierror
+from urllib.error import URLError
 
 # Model
-try:
-    print('Loading model...')
-    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True).eval()
-except Exception as e:
-    print(e)
-    print('Offline mode')
-    path = Path.home() / '.cache/torch/hub/ultralytics_yolov5_master'
-    model = torch.hub.load(str(path), 'yolov5s', source='local', pretrained=True).eval()
+def load_model_network():
+    try:
+        return torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True).eval()
+    except (gaierror, URLError):
+        return None
+
+def load_model_cache():
+    try:
+        path = Path.home() / '.cache/torch/hub/ultralytics_yolov5_master'
+        return torch.hub.load(str(path), 'yolov5s', source='local', pretrained=True).eval()
+    except:
+        print("You must run `tello download` while connected to network first!")
+        return None
 
 def detect_objects(image):
+    model = load_model_cache()
+    if model is None:
+        print('Detection model not found!')
+        return image, []
     detections = model([image]).pandas().xyxy[0]
     print('detections', detections)
     for label, confidence, left, right, bottom, top in detections[['name', 'confidence', 'xmin', 'xmax', 'ymin', 'ymax']].values:
-        print(f'label: {label}')
-        print(f'confidence: {confidence}')
-        print(f'left: {left}')
-        print(f'top: {top}')
-        print(f'right: {right}')
-        print(f'bottom: {bottom}')
         cv2.rectangle(image, (round(left), round(top)), (round(right), round(bottom)), (255, 0, 0), 2)
         cv2.putText(image, "{} [{:.2f}]".format(label, float(confidence)),
                             (round(left), round(top) - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
