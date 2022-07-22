@@ -11,9 +11,17 @@ build:
         'libxext6' -y
     COPY localizer /code/localizer
     RUN pip install -e /code/localizer
+    RUN tello --dry-run download
 
 docker:
     FROM +build
-    EXPOSE 9617
+    EXPOSE 6038/tcp
+    EXPOSE 8889/tcp
+    EXPOSE 9000/tcp
+    EXPOSE 9617/tcp
+    EXPOSE 6038/udp
+    EXPOSE 8889/udp
+    EXPOSE 9000/udp
+    EXPOSE 9617/udp
     ENTRYPOINT ["tello"]
     SAVE IMAGE tello:latest
