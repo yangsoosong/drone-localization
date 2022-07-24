@@ -23,3 +23,8 @@ seaborn>=0.11.0
 # required by YOLOv5
 ipython
 psutil
+
+# midas
+tensorflow
+tensorflow_hub
+cv2
