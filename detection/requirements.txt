@@ -1,0 +1,17 @@
+opencv-python
+ipython
+psutil
+click
+
+torch
+torchvision
+
+pandas
+matplotlib
+Pillow
+PyYAML
+requests
+scipy
+tqdm
+protobuf
+seaborn

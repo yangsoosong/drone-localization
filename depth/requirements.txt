@@ -1,0 +1,6 @@
+opencv-python
+tensorflow; platform_machine == 'x86_64'
+tensorflow-aarch64; platform_machine == 'aarch64' or platform_machine == 'arm64'
+tensorflow_hub
+numpy
+matplotlib
