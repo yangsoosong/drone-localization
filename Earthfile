@@ -5,13 +5,23 @@ WORKDIR /code
 build:
     ENV DEBIAN_FRONTEND noninteractive
     RUN apt-get update -y
+    RUN pip install --upgrade pip
     RUN apt install libgl1-mesa-glx -y
     RUN apt-get install 'ffmpeg' \
         'libsm6' \
         'libxext6' -y
-    COPY localizer /code/localizer
-    RUN pip install -e /code/localizer
-    RUN tello --dry-run download
+    COPY . /code
+    RUN /bin/bash /code/install.sh
+
+mac:
+    FROM sickcodes/docker-osx:monterey
+    WORKDIR /code
+    COPY . /code
+    RUN /bin/bash /code/install.sh
+
+test:
+    FROM +build
+    RUN pytest
 
 docker:
     FROM +build
