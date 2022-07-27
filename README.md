@@ -33,13 +33,13 @@ An example session:
 >>> import tellopy
 >>> from tester import handleFileReceived
 >>> drone = tellopy.Tello()
->>>  drone.connect()
->>>  drone.wait_for_connection(30.0)
->>>  drone.takeoff()
->>>  drone.take_picture()
->>>  drone.subscribe(drone.EVENT_FILE_RECEIVED, handleFileReceived)
->>>  drone.land()
->>>  drone.quit()
+>>> drone.connect()
+>>> drone.wait_for_connection(30.0)
+>>> drone.takeoff()
+>>> drone.take_picture()
+>>> drone.subscribe(drone.EVENT_FILE_RECEIVED, handleFileReceived)
+>>> drone.land()
+>>> drone.quit()
 ```
 Note that the above has no sleep commands, so it's best to wait for a response before 
 running the next command. After running the `connect()` command, you should see your 
