@@ -1,22 +1,62 @@
-import cv2
-import numpy as np
 import urllib.request
+from pathlib import Path
+
+import cv2
+import torch
 import matplotlib.pyplot as plt
 
-import tensorflow as tf
-import tensorflow_hub as hub
+model_type = "DPT_Large"     # MiDaS v3 - Large     (highest accuracy, slowest inference speed)
+#model_type = "DPT_Hybrid"   # MiDaS v3 - Hybrid    (medium accuracy, medium inference speed)
+#model_type = "MiDaS_small"  # MiDaS v2.1 - Small   (lowest accuracy, highest inference speed)
 
 def load_model_network():
     try:
-        return hub.load("https://tfhub.dev/intel/midas/v2/2", tags=['serve'])
+        midas = torch.hub.load("intel-isl/MiDaS", model_type)
+        device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        midas.to(device)
+        midas.eval()
+        return midas
     except Exception as e:
         print(e)
         return None
 
 def load_model_cache():
     try:
-        path = Path.home() / '.cache/torch/hub/intel_midas_v2_2'
-        return hub.load(str(path), tags=['serve'])
+        path = Path.home() / '.cache/torch/hub/intel-isl_MiDaS_master'
+        midas = torch.hub.load(str(path), model_type, source='local').eval()
+        device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        midas.to(device)
+        midas.eval()
+        return midas
+    except:
+        print("You must run `tello download` while connected to network first!")
+        return None
+
+def load_transforms_network():
+    try:
+        midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms")
+
+        if model_type == "DPT_Large" or model_type == "DPT_Hybrid":
+            transform = midas_transforms.dpt_transform
+        else:
+            transform = midas_transforms.small_transform
+
+        return transform
+    except Exception as e:
+        print(e)
+        return None
+
+def load_transforms_cache():
+    try:
+        path = Path.home() / '.cache/torch/hub/intel-isl_MiDaS_master'
+        midas_transforms = torch.hub.load(str(path), "transforms", source='local')
+
+        if model_type == "DPT_Large" or model_type == "DPT_Hybrid":
+            transform = midas_transforms.dpt_transform
+        else:
+            transform = midas_transforms.small_transform
+
+        return transform
     except Exception as e:
         print(e)
         return None
@@ -28,19 +68,24 @@ def load_img():
 
 def detect_depth(img):
     model = load_model_cache()
+    transform = load_transforms_cache()
 
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) / 255.0
-    img_resized = tf.image.resize(img, [384,384], method='bicubic', preserve_aspect_ratio=False)
-    img_resized = tf.transpose(img_resized, [2, 0, 1])
-    img_input = img_resized.numpy()
-    reshape_img = img_input.reshape(1,3,384,384)
-    tensor = tf.convert_to_tensor(reshape_img, dtype=tf.float32)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-    output = model.signatures['serving_default'](tensor)
-    prediction = output['default'].numpy()
-    prediction = prediction.reshape(384, 384)
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    input_batch = transform(img).to(device)
 
-    return prediction
+    with torch.no_grad():
+        prediction = model(input_batch)
+
+        prediction = torch.nn.functional.interpolate(
+            prediction.unsqueeze(1),
+            size=img.shape[:2],
+            mode="bicubic",
+            align_corners=False,
+        ).squeeze()
+
+    return prediction.cpu().numpy()
 
 def visualize_prediction(img, prediction):
     prediction = cv2.resize(prediction, (img.shape[1], img.shape[0]), interpolation=cv2.INTER_CUBIC)
