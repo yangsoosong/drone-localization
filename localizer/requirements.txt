@@ -1,4 +1,4 @@
-tellopy
+tellopy @ file://localhost/code/localizer/TelloPy#egg=tellopy
 av
 image
 click
