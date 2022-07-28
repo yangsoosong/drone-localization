@@ -1,0 +1,21 @@
+ip=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}') && docker run --rm -it \
+   --ipc=host \
+   --user=$(id -u) \
+   --env "DISPLAY=$ip:0" \
+   --workdir=/code \
+   --volume "$HOME/.Xauthority:/root/.Xauthority:ro" \
+   --volume="$PWD":/code \
+   --volume="/etc/group:/etc/group:ro" \
+   --volume="/etc/passwd:/etc/passwd:ro" \
+   --volume="/etc/shadow:/etc/shadow:ro" \
+   --volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
+   --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+   -p 0.0.0.0:6038:6038/udp \
+   -p 0.0.0.0:8889:8889/udp \
+   -p 0.0.0.0:9000:9000/udp \
+   -p 0.0.0.0:9617:9617/udp \
+   -p 0.0.0.0:6038:6038/tcp \
+   -p 0.0.0.0:8889:8889/tcp \
+   -p 0.0.0.0:9000:9000/tcp \
+   -p 0.0.0.0:9617:9617/tcp \
+   tello stream
