@@ -1,0 +1,1 @@
+poetry install && poetry run tello --dry-run download

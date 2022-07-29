@@ -7,6 +7,8 @@ import numpy
 import tellopy
 import click
 
+tello_info = {}
+
 @click.group()
 @click.option('--dry-run/--live', default=False)
 @click.pass_context
@@ -75,13 +77,20 @@ def land(ctx):
         return
     ctx.obj['drone'].land()
 
+def set_tello_flight_info(data):
+    for (k, v) in data.items():
+        if k not in tello_info:
+            tello_info[k] = []
+        tello_info[k].append(v)
+    print('tello_info', tello_info)
+
 @main.command()
 @click.pass_context
 def query(ctx):
     if ctx.obj['DRY_RUN']:
         print('>> query <<')
         return
-    ctx.obj['drone'].subscribe(ctx.obj['drone'].EVENT_FLIGHT_DATA, lambda event, sender, data, **args: print('flight data: %s: %s' % (event.name, str(data))))
+    ctx.obj['drone'].subscribe(ctx.obj['drone'].EVENT_FLIGHT_DATA, (lambda event, sender, data, **args: set_tello_flight_info(data)))
 
 @main.command()
 @click.pass_context
@@ -121,9 +130,15 @@ def stream(ctx):
             frame_skip = int((time.time() - start_time)/time_base)
 
 @main.command()
+def download():
+    from .detection import load_model_network
+    load_model_network()
+
+@main.command()
 @click.pass_context
 def interactive(ctx):
     ctx.invoke(stream)
+    ctx.invoke(query)
     while True:
         command = click.prompt('command > ', type=str)
         if command == 'move':
@@ -138,4 +153,4 @@ def interactive(ctx):
             ctx.invoke(land)
         elif command == 'exit':
             break
-        ctx.invoke(query)
+        
