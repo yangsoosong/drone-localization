@@ -19,10 +19,11 @@ class Tello:
         self.drone.subscribe(self.drone.EVENT_FLIGHT_DATA, (lambda event, sender, data, **args: self._set_tello_flight_info(data)))
 
     def _set_tello_flight_info(self, data):
-        for (k, v) in data.items():
-            if k not in self.flight_info:
-                self.flight_info[k] = []
-            self.flight_info[k].append(v)
+        # for (k, v) in data.items():
+        #     if k not in self.flight_info:
+        #         self.flight_info[k] = []
+        #     self.flight_info[k].append(v)
+        pass
 
     def move(self, direction):
         if direction == 'forward':
