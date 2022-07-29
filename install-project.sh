@@ -1,1 +1,3 @@
-poetry install && poetry run tello --dry-run download
+./install-py-packages.sh
+source env/bin/activate
+detection download

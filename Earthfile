@@ -38,10 +38,13 @@ build:
         libsm6 \
         libxext6 && \
         apt-get clean
-    COPY localizer /code/localizer
-    RUN pip install -e /code/localizer
+    COPY . /code
+    RUN pip install -e /code/tello
+    RUN pip install -e /code/detection
+    RUN pip install -e /code/depth
     RUN pip install jupyterlab
-    RUN localizer --dry-run download
+    RUN detection download
+    RUN depth download
 
 docker:
     FROM +build

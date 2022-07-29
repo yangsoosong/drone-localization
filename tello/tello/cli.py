@@ -1,11 +1,11 @@
-import argparse
 import time
 
 import av
 import cv2
 import numpy
-import tellopy
 import click
+
+from .tello import Tello
 
 tello_info = {}
 
@@ -20,14 +20,8 @@ def main(ctx, dry_run):
     if ctx.obj['DRY_RUN']:
         print('>> dry run mode <<')
         return
-    ctx.obj['drone'] = tellopy.Tello()
-    try:
-        ctx.obj['drone'].connect()
-        ctx.obj['drone'].wait_for_connection(60.0)
-    except Exception as ex:
-        print(ex)
-        ctx.obj['drone'].quit()
-        return None
+    print('initializing tello connection')
+    ctx.obj['drone'] = Tello()
 
 @main.command()
 @click.option('--direction', nargs=1, type=click.Choice(["forward", "back", "left", "right", "up", "down"], case_sensitive=False), prompt=True)
@@ -36,18 +30,7 @@ def move(ctx, direction):
     if ctx.obj['DRY_RUN']:
         print(f'>> move {direction} <<')
         return
-    if direction == 'forward':
-        ctx.obj['drone'].forward(0.5)
-    elif direction == 'back':
-        ctx.obj['drone'].back(0.5)
-    elif direction == 'left':
-        ctx.obj['drone'].left(0.5)
-    elif direction == 'right':
-        ctx.obj['drone'].right(0.5)
-    elif direction == 'up':
-        ctx.obj['drone'].up(0.5)
-    elif direction == 'down':
-        ctx.obj['drone'].down(0.5)
+    ctx.obj['drone'].move(direction)
 
 @main.command()
 @click.option('--direction', nargs=1, type=click.Choice(["clockwise", "counter"], case_sensitive=False), prompt=True)
@@ -56,10 +39,7 @@ def rotate(ctx, direction):
     if ctx.obj['DRY_RUN']:
         print(f'>> rotate {direction} <<')
         return
-    if direction == 'clockwise':
-        ctx.obj['drone'].clockwise(90)
-    else:
-        ctx.obj['drone'].counter_clockwise(90)
+    ctx.obj['drone'].rotate(direction)
 
 @main.command()
 @click.pass_context
@@ -77,68 +57,28 @@ def land(ctx):
         return
     ctx.obj['drone'].land()
 
-def set_tello_flight_info(data):
-    for (k, v) in data.items():
-        if k not in tello_info:
-            tello_info[k] = []
-        tello_info[k].append(v)
-    print('tello_info', tello_info)
-
 @main.command()
 @click.pass_context
 def query(ctx):
     if ctx.obj['DRY_RUN']:
         print('>> query <<')
         return
-    ctx.obj['drone'].subscribe(ctx.obj['drone'].EVENT_FLIGHT_DATA, (lambda event, sender, data, **args: set_tello_flight_info(data)))
+    print(ctx.obj['drone'].query())
 
 @main.command()
 @click.pass_context
 def stream(ctx):
-    from .detection import detect_objects
     if ctx.obj['DRY_RUN']:
         print('>> stream <<')
         return
-    retry = 3
-    container = None
-    while container is None and 0 < retry:
-        retry -= 1
-        try:
-            container = av.open(ctx.obj['drone'].get_video_stream())
-        except av.AVError as ave:
-            print(ave)
-            print('retry...')
-
-    # skip first 300 frames
-    frame_skip = 300
-    while True:
-        for frame in container.decode(video=0):
-            if 0 < frame_skip:
-                frame_skip = frame_skip - 1
-                continue
-            start_time = time.time()
-            image = cv2.cvtColor(numpy.array(frame.to_image()), cv2.COLOR_RGB2BGR)
-            print(f'detecting objects in frame')
-            annotated_image, detections = detect_objects(image)
-            print(f'detections: {detections}')
-            cv2.imshow("", annotated_image)     
-            cv2.waitKey(1)
-            if frame.time_base < 1.0/60:
-                time_base = 1.0/60
-            else:
-                time_base = frame.time_base
-            frame_skip = int((time.time() - start_time)/time_base)
-
-@main.command()
-def download():
-    from .detection import load_model_network
-    load_model_network()
+    for frame in ctx.obj['drone'].get_video_frames():
+        cv2.imshow("", frame)     
+        cv2.waitKey(1)
 
 @main.command()
 @click.pass_context
 def interactive(ctx):
     ctx.invoke(stream)
-    ctx.invoke(query)
     while True:
         command = click.prompt('command > ', type=str)
         if command == 'move':
@@ -153,4 +93,5 @@ def interactive(ctx):
             ctx.invoke(land)
         elif command == 'exit':
             break
+        ctx.invoke(query)
         
