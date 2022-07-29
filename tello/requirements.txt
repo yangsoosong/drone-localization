@@ -1,0 +1,6 @@
+tellopy
+av
+image
+click
+numpy
+opencv-python
