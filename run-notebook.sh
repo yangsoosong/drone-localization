@@ -1,5 +1,6 @@
 docker run --rm -it \
    --ipc=host \
+   --volume `pwd`:/code \
    -p 0.0.0.0:6038:6038/udp \
    -p 0.0.0.0:8889:8889/udp \
    -p 0.0.0.0:9000:9000/udp \
