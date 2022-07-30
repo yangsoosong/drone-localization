@@ -3,3 +3,4 @@ __pycache__/
 build/
 *.pt
 .ipynb_checkpoints/
+docker-push.sh
