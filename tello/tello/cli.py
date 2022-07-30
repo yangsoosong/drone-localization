@@ -1,8 +1,4 @@
-import time
-
-import av
 import cv2
-import numpy
 import click
 
 from .tello import Tello
