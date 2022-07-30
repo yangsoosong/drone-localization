@@ -59,3 +59,20 @@ docker:
     EXPOSE 8890/tcp
     ENTRYPOINT ["/bin/bash"]
     SAVE IMAGE localizer:latest
+
+build-all-platforms:
+    BUILD --platform=linux/amd64 --platform=linux/arm64 +build
+
+push:
+    FROM +build-all-platforms
+    EXPOSE 6038/tcp
+    EXPOSE 8889/tcp
+    EXPOSE 9000/tcp
+    EXPOSE 9617/tcp
+    EXPOSE 6038/udp
+    EXPOSE 8889/udp
+    EXPOSE 9000/udp
+    EXPOSE 9617/udp
+    EXPOSE 8890/tcp
+    ENTRYPOINT ["/bin/bash"]
+    SAVE IMAGE --push ghcr.io/itsjohnward/localizer:latest
