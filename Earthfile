@@ -40,9 +40,13 @@ build:
         apt-get clean
     COPY . /code
     RUN pip install -e /code/tello
+    RUN python -c "import tello; print('tello import works')"
     RUN pip install -e /code/detection
+    RUN python -c "import detection; print('detection import works')"
     RUN pip install -e /code/depth
+    RUN python -c "import depth; print('depth import works')"
     RUN pip install jupyterlab
+    RUN command -v jupyter >/dev/null 2>&1 || { echo >&2 "jupyter did not install correctly.  Aborting."; exit 1; }
     RUN detection download
     RUN depth download
 
@@ -58,4 +62,7 @@ docker:
     EXPOSE 9617/udp
     EXPOSE 8890/tcp
     ENTRYPOINT ["/bin/bash"]
-    SAVE IMAGE localizer:latest
+    SAVE IMAGE --push ghcr.io/itsjohnward/localizer:latest
+
+push:
+    BUILD --platform=linux/amd64 --platform=linux/arm64 +docker
