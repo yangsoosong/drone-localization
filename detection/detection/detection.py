@@ -25,7 +25,7 @@ def detect_objects(image):
         print('Detection model not found!')
         return image, []
     detections = model([image]).pandas().xyxy[0]
-    print('detections', detections)
+    # print('detections', detections)
     for label, confidence, left, right, bottom, top in detections[['name', 'confidence', 'xmin', 'xmax', 'ymin', 'ymax']].values:
         cv2.rectangle(image, (round(left), round(top)), (round(right), round(bottom)), (255, 0, 0), 2)
         cv2.putText(image, "{} [{:.2f}]".format(label, float(confidence)),
