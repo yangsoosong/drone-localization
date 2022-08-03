@@ -9,7 +9,6 @@ Setup
 ---
 
 Prerequisites:
-- [earthly](https://earthly.dev/get_earthly)
 - [docker](https://docker.com)
 
 In the repo, run the following commands:
