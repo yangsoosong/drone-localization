@@ -27,37 +27,47 @@ Report
 Getting started - Linux
 ---
 ####
-These steps will work for any Linux distribution with systemd.
-1. Install Docker Desktop, Earthly, and jupyter lab.
-2. In your system terminal, run `sudo usermod -a -G docker $USER`, then reboot.
-3. run `sudo systemctl restart docker`, then run `docker ps` to verify that docker is working. You should see a list in all caps starting with "CONTAINER ID".
-4. run `earthly +docker && ./run-notebook.sh` in the main branch of the project directory.
-5. This will start a length installation process (about 20 minutes). At the end, you may be prompted to reboot. If so, repeat step 3 and run `./run-notebook.sh` in the project directory again.
-6. Copy the URL output, paste it into a browser. This will open a jupyter lab.
 
-Getting Started - MacOS
+1. Clone the repo:
+
+```
+$ git clone git@github.com:yangsoosong/drone-localization.git
+```
+
+2. Make sure Docker Desktop's installed. If not, see https://docs.docker.com/desktop/install/linux-install/#generic-installation-steps/. In summary:
+
+   1. Use your system's package manager to install docker-desktop
+   2. In your terminal, run `sudo usermod -a -G docker $USER`, then reboot.
+   3. run `sudo systemctl restart docker`, then run `docker ps` to verify that docker is working. You should see a list in all caps starting with "CONTAINER ID".
+
+3. Run `./run-notebook.sh` in the project directory (for example, `~/drone-localization`).
+4. Copy the http://127.0.0.1:8890 URL and paste it into a browser to open Jupyter Lab.
+
+Getting Started - MacOS (x86-64 & ARM)
 ---
 ####
 
-1. Make sure homebrew's installed. If not,
+1. Clone the repo:
+
+```
+$ git clone git@github.com:yangsoosong/drone-localization.git
+```
+
+2. Make sure homebrew's installed. If not,
 
 ```sh
 $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-2. Make sure Docker Desktop's installed. If not,
+3. Make sure Docker Desktop's installed. If not,
 
 ```
 $ brew install --cask docker
 ```
 
-3. Open Docker.app. Wait for it to start up, and allow privileged access and provide your password if prompted.
-
-4. And then you can run the script:
-
-```sh
-$ ./run-notebook.sh
-```
+4. Open Docker.app. Wait for it to start up, and allow privileged access and provide your password if prompted.
+5. Run `./run-notebook.sh` in the project directory (for example, `~/drone-localization`).
+6. Copy the http://127.0.0.1:8890 URL and paste it into a browser to open Jupyter Lab.
 
 Localizer
 ---
