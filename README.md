@@ -38,7 +38,26 @@ These steps will work for any Linux distribution with systemd.
 Getting Started - MacOS
 ---
 ####
-Are steps for M1 Macs different from Intel Macs?
+
+1. Make sure homebrew's installed. If not,
+
+```sh
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+2. Make sure Docker Desktop's installed. If not,
+
+```
+$ brew install --cask docker
+```
+
+3. Open Docker.app. Wait for it to start up, and allow privileged access and provide your password if prompted.
+
+4. And then you can run the script:
+
+```sh
+$ ./run-notebook.sh
+```
 
 Localizer
 ---
