@@ -3,7 +3,7 @@ DGMD S-17 Final Project
 ## Monocular drone (Tello) localization
 2022 DGMD S-17 Robotics, Autonomous Vehicles, Drones, and Artificial Intelligence @ Harvard University Extension School
 
-**Team Members:** Daniel Lebedinsky, Yangsoo Song, John Ward, Claire Peters
+**Team Members:** Daniel Lebedinsky, Claire Peters, Yangsoo Song, John Ward
 
 Setup
 ---
@@ -13,7 +13,6 @@ Prerequisites:
 
 In the repo, run the following commands:
 ```
-$ earthly +docker
 $ ./run-notebook.sh
 ```
 
