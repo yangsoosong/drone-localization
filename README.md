@@ -37,6 +37,44 @@ Report
 
 # Documentation
 
+Getting Started - MacOS (x86-64 & ARM)
+---
+####
+
+1. Clone the repo:
+
+```
+$ git clone git@github.com:yangsoosong/drone-localization.git
+```
+
+2. Make sure homebrew's installed. If not,
+
+```sh
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+3. Make sure Docker Desktop's installed. If not,
+
+```
+$ brew install --cask docker
+```
+
+4. Open Docker.app. Wait for it to start up, and allow privileged access and provide your password if prompted.
+
+5. Generate PAT token -> [instruction](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+
+6. Run below command to access docker container
+```
+echo TOKEN_HERE | docker login ghcr.io -u USERNAME --password-stdin
+```
+
+7. Run `./run-notebook.sh` in the project directory (for example, `~/drone-localization`).
+
+8. Copy the http://127.0.0.1:8890 URL and paste it into a browser to open Jupyter Lab.
+
+See https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry
+if you are having access issue
+
 Getting started - Linux
 ---
 ####
