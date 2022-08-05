@@ -34,4 +34,12 @@ These steps will work for any Linux distribution with systemd.
 Detection and Depth Localizer notebook
 ---
 ####
-To create the localizer notebook with the detection and depth combined analysis, I had to import the detection and depth files in the beginning, which are included in the environment. Unfortunately, do to an indeterminate bug in either my system or the docker environment, I was not able to fly the drone while recording. The detection and depth analysis in localizer_cv.ipynb was performed on still frames after they were taken from the drone. If there was more time for this project, the next step would have been to analyze the photos as they were being taken during the flight of the drone, and estimate the distance from the drone to various objects in its field of vision. 
+Results of Detection: \
+<img src=".github/rdme_onlydet.png" width="300" >
+
+Taking the bounding boxes from Detection, and averaging the depth field values within them: \
+<img src=".github/rdme_depth.png" width="300" >
+
+To create the localizer notebook with the detection and depth combined analysis, I had to import the detection and depth files in the beginning, which are included in the environment. \
+Unfortunately, do to an indeterminate bug in either my system or the docker environment, I was not able to fly the drone while recording. Despite various attempts to change file permissions and the container setup, I kept getting the message "Notebook localizer.ipynb is not trusted" \
+The detection and depth analysis in localizer_cv.ipynb was performed on still frames after they were taken from the drone. If there was more time for this project, the next step would have been to analyze the photos as they were being taken during the flight of the drone, and estimate the distance from the drone to various objects. \
