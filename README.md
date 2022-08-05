@@ -35,12 +35,7 @@ These steps will work for any Linux distribution with systemd.
 5. This will start a length installation process (about 20 minutes). At the end, you may be prompted to reboot. If so, repeat step 3 and run `./run-notebook.sh` in the project directory again.
 6. Copy the URL output, paste it into a browser. This will open a jupyter lab.
 
-Getting Started - MacOS
+Detection and Depth Localizer notebook
 ---
 ####
-Are steps for M1 Macs different from Intel Macs?
-
-Localizer
----
-####
-
+To create the localizer notebook with the detection and depth combined analysis, I had to import the detection and depth files in the beginning, which are included in the environment. Unfortunately, do to an indeterminate bug in either my system or the docker environment, I was not able to fly the drone while recording. The detection and depth analysis in localizer_cv.ipynb was performed on still frames after they were taken from the drone. If there was more time for this project, the next step would have been to analyze the photos as they were being taken during the flight of the drone, and estimate the distance from the drone to various objects in its field of vision. 
