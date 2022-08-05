@@ -3,27 +3,19 @@
 ### 2022 DGMD S-17 Robotics, Autonomous Vehicles, Drones, and Artificial Intelligence @ Harvard University Extension School
 
 **Team Members:** Daniel Lebedinsky, Claire Peters, Yangsoo Song, John Ward
-#### Overview
+### Overview
 Simultaneous Localization and Mapping (SLAM) has become the foundation of a self-navigating system. However, it is hard to navigate and detect its localization in indoor environments for small drones with just a frontal monocular camera. As a final project for the class, we will create a program where given an arbitrary launch point, the drone should be able to determine its position and orientation in a known room.
 
-#### Background
+### Background
 We intend to create a system that would allow the Tello drone to determine its location using the camera feed alone. This drone does not come with a GPS, LiDAR, or any other geolocation system pre-installed, and only has one camera, so it does not have a way to directly perceive depth. This poses a challenge to identifying distance to walls and other obstacles.
 To implement a SLAM system that can work within the Tello’s material constraints, we will use the  library YOLO, which can identify various objects in a video stream with computer vision, and another library that can compute distance from a monocular camera to a given object in the field of view (likely MiDaS or fast-depth). We will combine their functionality to create a program that can locate a marker, ie a sign, and take off facing the sign. Once we are able to control the vertical motion so that the drone rises to the level of the sign, we can rotate the drone, making it orient itself in the room by identifying distances from itself to other objects. We will then direct the drone to move towards a target and take a photo, while avoiding objects in its path.
 
-#### Hardeware Used
+### Hardeware Used
 [Tello](https://www.ryzerobotics.com/tello), a mini drone equipped with an HD camera. 
 
-Proposal
----
-#### https://docs.google.com/document/d/1O5AGPdEM5yHExTr-1Uiikc-4K_LPvO8e1A04pVEgl_Y/edit
-
-Videos / Presentation
----
-#### https://www.youtube.com/watch?v=NTBuCxX9tlA
-
-Report
----
-#### https://docs.google.com/document/d/1SZOcqcu_vET3Nv1ERcdWgQcP3W2ia9YvJJeHt1oc_AI/edit
+### Links
+| [Proposal](https://docs.google.com/document/d/1O5AGPdEM5yHExTr-1Uiikc-4K_LPvO8e1A04pVEgl_Y/edit)| [Video Presentation](https://www.youtube.com/watch?v=NTBuCxX9tlA)|[Presentation Slides](https://docs.google.com/presentation/d/1Env01mUp4RnFGHYDNdMsWdVohSzh09NERmVi7Icar0s/edit#slide=id.g13ff414f7c5_0_79)|[Report](https://docs.google.com/document/d/1SZOcqcu_vET3Nv1ERcdWgQcP3W2ia9YvJJeHt1oc_AI/edit)|
+| ------------- |:-------------:| -----:|-----:|
 
 # Documentation
 
